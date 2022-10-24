@@ -5,10 +5,6 @@ import wvcp_solutionPrinter
 def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
     print(name + '\n')
 
-    # ajout des sommets virtuels
-    for i in range(nr_vertices):
-        
-
     model = cp_model.CpModel()
 
     x_color = {}
