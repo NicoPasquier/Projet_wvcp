@@ -28,13 +28,14 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
         self.affichage_Matrice()
         print()
         self.affichage_Sommet_Couleur()
+        self.affichage_Sommet_Virtuel()
         print()
         self.affichage_Poids_Couleur()
         print()
         print('score = %s' % self.Value(self.__x_score), end='\n\n')
 
     def affichage_Matrice(self):
-        for i in range(self.__nr_vertices):
+        for i in range(2 * self.__nr_vertices):
             for j in range(self.__ub_color):
                 print('%i' % self.Value(self.__x_color[i, j]), end=' ')
             print()
@@ -44,6 +45,12 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
             for j in range(self.__ub_color):
                 if self.Value(self.__x_color[i, j]) == 1:
                     print('sommet %i = %f' % (i, j))
+
+    def affichage_Sommet_Virtuel(self):
+        for i in range(self.__nr_vertices, 2 * self.__nr_vertices):
+            for j in range(self.__ub_color):
+                if self.Value(self.__x_color[i, j]) == 1:
+                    print('sommet virtuel %i = %f' % (i, j))
 
     def affichage_Poids_Couleur(self):
         print('poids des couleur: [', end='')

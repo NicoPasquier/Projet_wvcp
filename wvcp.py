@@ -5,6 +5,11 @@ import wvcp_solutionPrinter
 def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
     print(name + '\n')
 
+    # ajout des sommets virtuels
+    for i in range(nr_vertices):
+        neighborhoods.append([])
+        weight.append(0)
+
     model = cp_model.CpModel()
 
     x_color = {}
@@ -18,13 +23,16 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
     for i in range(2 * nr_vertices):
         model.Add((sum(x_color[i, j] for j in range(ub_colors))) == 1)
 
-    for i1 in range(nr_vertices):
+    for i in range(nr_vertices, 2 * nr_vertices):
+        model.Add(x_color[i, i - nr_vertices] == 1)
+
+    for i1 in range(2 * nr_vertices):
         for i2 in neighborhoods[i1]:
             for j in range(ub_colors):
                 model.Add(x_color[i1, j] + x_color[i2, j] <= 1)
 
     for j in range(ub_colors):
-        model.AddMaxEquality(x_weight[j], (x_color[i, j] * weight[i] for i in range(nr_vertices)))
+        model.AddMaxEquality(x_weight[j], (x_color[i, j] * weight[i] for i in range(2 * nr_vertices)))
 
     model.Add(x_score == sum(x_weight))
     model.Minimize(x_score)
