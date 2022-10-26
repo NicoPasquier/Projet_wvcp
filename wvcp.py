@@ -1,4 +1,6 @@
 from ortools.sat.python import cp_model
+
+import cp_sat_utils
 import wvcp_solutionPrinter
 
 
@@ -34,6 +36,8 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
 
     for j in range(ub_colors):
         model.AddMaxEquality(x_weight[j], (x_color[i, j] * weight[i] for i in range(nr_vertices)))
+
+    cp_sat_utils.decreasing(model, x_weight)
 
     model.Add(x_score == sum(x_weight))
     model.Minimize(x_score)
