@@ -53,7 +53,7 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
         cp_sat_utils.global_cardinality(
             model,
             [y_color[u] for u in neighborhoods[i]],
-            list(range(nr_vertices+1)),
+            [j for j in range(nr_vertices+1)],
             z
         )
         model.Add(y_color[i] == cp_sat_utils.argmin(model, z))
