@@ -1,5 +1,6 @@
 import fileReader
 import wvcp
+import sortWeights
 
 
 name = "test"
@@ -9,6 +10,12 @@ neighborhoods = [[1, 3], [0, 2], [1, 3], [0, 2]]
 weight = [1, 1, 1, 1]
 ub_colors = nr_vertices
 
-#name, nr_vertices, weight, nr_edges, neighborhoods, ub_colors = fileReader.fileReader('./original_graphs/p06')
+name, nr_vertices, weight, nr_edges, neighborhoods, ub_colors = fileReader.fileReader('./original_graphs/p07')
+
+# Sorting
+weight, neighborhoods =  sortWeights.descendingSort(neighborhoods, weight)
 
 wvcp.wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors)
+
+# print(weight)
+# print(neighborhoods)
