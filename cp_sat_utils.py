@@ -724,3 +724,41 @@ def permutation3(model, from_a, perm_a, to_a):
   for i in range(len(from_a)):
     # to_a[i] = from_a[perm_a[i]]
     model.AddElement(perm_a[i],from_a,to_a[i])
+
+
+def argmax(model, x, z):
+    u = len(x) - 1
+    n = len(x)
+    xs = [model.NewIntVar(0, 1000000, 'xs%i' % i) for i in range(n)]
+    for j in range(n):
+        model.Add(xs[j] == n * x[j] + (u-j))
+    Mx = model.NewIntVar(0, 1000000, 'Mx')
+    model.AddMaxEquality(Mx, xs)
+
+    for j in range(n):
+        b = model.NewBoolVar('')
+        model.Add(z != j).OnlyEnforceIf(b)
+        model.Add(z == j).OnlyEnforceIf(b.Not())
+
+        model.Add(Mx > xs[j]).OnlyEnforceIf(b)
+        model.Add(Mx <= xs[j]).OnlyEnforceIf(b.Not())
+
+
+def argmin(model, x):
+    z = model.NewIntVar(0, 1000000, 'z')
+    n = len(x)
+    xs = [model.NewIntVar(0, 1000000, 'xs%i' % i) for i in range(n)]
+    for j in range(n):
+        model.Add(xs[j] == n * x[j] + j)
+    Mx = model.NewIntVar(0, 1000000, 'Mx')
+    model.AddMinEquality(Mx, xs)
+
+    for j in range(n):
+        b = model.NewBoolVar('')
+        model.Add(z != j).OnlyEnforceIf(b)
+        model.Add(z == j).OnlyEnforceIf(b.Not())
+
+        model.Add(Mx < xs[j]).OnlyEnforceIf(b)
+        model.Add(Mx >= xs[j]).OnlyEnforceIf(b.Not())
+
+    return z

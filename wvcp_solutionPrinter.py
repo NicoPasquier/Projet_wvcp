@@ -25,7 +25,6 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
         print('Solution %i, time = %f s' %
               (self.__solution_count, current_time - self.__start_time))
         self.__solution_count += 1
-
         self.affichage_Matrice()
         print()
         self.affichage_Sommet_Couleur()
