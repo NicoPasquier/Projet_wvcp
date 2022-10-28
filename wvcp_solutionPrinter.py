@@ -18,7 +18,7 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
         self.__start_time = time.time()
 
     def solution_count(self):
-        return self.__solution_count
+        return self.__solution_count, self.Value(self.__x_score)
 
     def on_solution_callback(self):
         current_time = time.time()

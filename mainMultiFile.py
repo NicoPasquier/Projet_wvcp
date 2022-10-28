@@ -16,7 +16,6 @@ def Solver(filename):
     return count, score, time
 
 header = ['Name', 'Number of Solutions','Score', 'Time (Seconds)']
-data = []
 
 file = open("test_instance_list.txt", "r")
 
