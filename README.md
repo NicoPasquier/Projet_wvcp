@@ -17,3 +17,5 @@ Pour lancer simplement un seul fichier, il faut exécuter le fichier main.py en 
 Vous pouvez commenter/décommenter les règles que vous souhaitez utilier (SR2, DR2) dans le fichier wvcp.py
 
 Pour modifier l'affichage dans la console, commentez/décommentez ce que vous souhaitez dans la fonction "on_solution_callback(self)" du fichier wvcp_solutionPrinter.py
+
+Pour le lancement avec plusieurs coeurs, modifiez la variable num_search_workers à la ligne 69 du fichier wvcp.py en y ajoutant le nombre de coeur que vous souhaitez utiliser. 

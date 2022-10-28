@@ -1,4 +1,5 @@
 from ortools.sat.python import cp_model
+from ortools.sat import sat_parameters_pb2
 
 import cp_sat_utils
 import wvcp_solutionPrinter
@@ -65,6 +66,7 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
     solution_printer = wvcp_solutionPrinter.SolutionPrinter(nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_score, ub_colors)
     solver.parameters.enumerate_all_solutions = True
     #solver.parameters.num_search_workers = 4
+    solver.parameters = sat_parameters_pb2.SatParameters(num_search_workers=4)
     solver.Solve(model, solution_printer)
     count, score = solution_printer.solution_count()
     time = solver.WallTime()
