@@ -20,7 +20,7 @@ data = []
 
 file = open("test_instance_list.txt", "r")
 
-with open('results_linux_Wsort.csv', 'w', encoding='UTF8', newline='') as f:
+with open('results.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     for line in file:
