@@ -18,7 +18,7 @@ def Solver(filename):
 header = ['Name', 'Number of Solutions','Score', 'Time (Seconds)']
 data = []
 
-file = open("test_instance_approuved.txt", "r")
+file = open("test_instance_list.txt", "r")
 
 with open('results.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
