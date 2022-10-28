@@ -8,7 +8,7 @@ def Solver(filename):
     name, nr_vertices, weight, nr_edges, neighborhoods, ub_colors = fileReader.fileReader('./original_graphs/'+filename)
 
     # Descending sort
-    # weight, neighborhoods =  sortWeights.descendingSort(neighborhoods, weight)
+    weight, neighborhoods =  sortWeights.descendingSort(neighborhoods, weight)
 
     # Solving
     count, score, time = wvcp.wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors)
@@ -20,7 +20,7 @@ data = []
 
 file = open("test_instance_list.txt", "r")
 
-with open('results_Wsort.csv', 'w', encoding='UTF8', newline='') as f:
+with open('results_linux_Wsort.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     for line in file:
