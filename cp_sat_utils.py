@@ -726,7 +726,8 @@ def permutation3(model, from_a, perm_a, to_a):
     model.AddElement(perm_a[i],from_a,to_a[i])
 
 
-def argmax(model, x, z):
+def argmax(model, x):
+    z = model.NewIntVar(0, 1000000, 'z')
     u = len(x) - 1
     n = len(x)
     xs = [model.NewIntVar(0, 1000000, 'xs%i' % i) for i in range(n)]
@@ -742,6 +743,8 @@ def argmax(model, x, z):
 
         model.Add(Mx > xs[j]).OnlyEnforceIf(b)
         model.Add(Mx <= xs[j]).OnlyEnforceIf(b.Not())
+
+    return z
 
 
 def argmin(model, x):
