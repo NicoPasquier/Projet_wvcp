@@ -39,13 +39,30 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
 
     cp_sat_utils.decreasing(model, x_weight)
 
+    # SR1
+
+    # DR1
+
+    # SR2
+    for i in range(nr_vertices):
+        model.Add(y_color[i] <= len(neighborhoods[i]) + 1)
+
+    # DR2
+    for i in range(nr_vertices):
+        z = [model.NewIntVar(0, len(neighborhoods[i]), '%i' % j) for j in range(nr_vertices+1)]
+        cp_sat_utils.global_cardinality(
+            model,
+            [y_color[u] for u in neighborhoods[i]],
+            [j for j in range(nr_vertices+1)],
+            z
+        )
+        model.Add(y_color[i] == cp_sat_utils.argmin(model, z))
+
     model.Add(x_score == sum(x_weight))
     model.Minimize(x_score)
 
     solver = cp_model.CpSolver()
     solution_printer = wvcp_solutionPrinter.SolutionPrinter(nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_score, ub_colors)
     solver.parameters.enumerate_all_solutions = True
-    #solver.num_search_parameters = 4
-    #solver.num_search_workers = 4
     #solver.parameters.num_search_workers = 4
     solver.Solve(model, solution_printer)
