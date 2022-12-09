@@ -66,7 +66,7 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
     solution_printer = wvcp_solutionPrinter.SolutionPrinter(nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_score, ub_colors)
     solver.parameters.enumerate_all_solutions = True
     #solver.parameters.num_search_workers = 4
-    solver.parameters = sat_parameters_pb2.SatParameters(num_search_workers=4)
+    solver.parameters = sat_parameters_pb2.SatParameters(num_search_workers=4, max_time_in_seconds = 1200.0)
     solver.Solve(model, solution_printer)
     count, score = solution_printer.solution_count()
     time = solver.WallTime()
