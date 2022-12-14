@@ -1,7 +1,8 @@
-import fileReader
-import wvcp
-import transformGraph
-import wvcp_dual
+from fileReader import fileReader
+from fileReader import sortWeights
+from fileReader import transformGraph
+from wvcp import wvcp_primal
+from wvcp import wvcp_dual
 
 name = "test"
 nr_vertices = 5
@@ -21,4 +22,4 @@ name, nr_vertices, weight, nr_edges, neighborhoods, ub_colors = fileReader.fileR
 #print(transformGraph.genComplementaryGraph(nr_vertices, neighborhoods, weight))
 wvcp_dual.dual(name, nr_vertices, transformGraph.genComplementaryGraph(nr_vertices, neighborhoods, weight), weight)
 
-wvcp.wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, nr_vertices)
+wvcp_primal.primal(name, nr_vertices, nr_edges, neighborhoods, weight, nr_vertices)

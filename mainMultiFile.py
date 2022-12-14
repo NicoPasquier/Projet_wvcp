@@ -1,6 +1,8 @@
-import fileReader
-import wvcp
-import sortWeights
+from fileReader import fileReader
+from fileReader import sortWeights
+from fileReader import transformGraph
+from wvcp import wvcp_primal
+from wvcp import wvcp_dual
 import csv
 
 def Solver(filename):
@@ -11,15 +13,15 @@ def Solver(filename):
     weight, neighborhoods =  sortWeights.descendingSort(neighborhoods, weight)
 
     # Solving
-    count, score, time = wvcp.wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors)
+    count, score, time = wvcp_primal.primal(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors)
 
     return count, score, time
 
 header = ['Name', 'Number of Solutions','Score', 'Time (Seconds)']
 
-file = open("test_instance_list.txt", "r")
+file = open("./annexes/test_instance_list.txt", "r")
 
-with open('results.csv', 'w', encoding='UTF8', newline='') as f:
+with open('./annexes/results.csv', 'w', encoding='UTF8', newline='') as f:
     writer = csv.writer(f)
     writer.writerow(header)
     for line in file:

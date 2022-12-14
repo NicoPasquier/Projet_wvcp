@@ -1,6 +1,6 @@
 from ortools.sat.python import cp_model
 from ortools.sat import sat_parameters_pb2
-import wvcp_dual_solutionPrinter
+from . import wvcp_dual_solutionPrinter
 
 
 def dual(name, nr_vertices, arc, weight):

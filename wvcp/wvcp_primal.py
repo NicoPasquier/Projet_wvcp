@@ -1,11 +1,11 @@
 from ortools.sat.python import cp_model
 from ortools.sat import sat_parameters_pb2
 
-import cp_sat_utils
-import wvcp_solutionPrinter
+from . import cp_sat_utils
+from . import wvcp_primal_solutionPrinter
 
 
-def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
+def primal(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
     print(name + '\n')
 
     model = cp_model.CpModel()
@@ -60,17 +60,18 @@ def wvcp(name, nr_vertices, nr_edges, neighborhoods, weight, ub_colors):
         model.Add(y_color[i] == cp_sat_utils.argmin(model, z))
 
     model.Add(x_score == sum(x_weight))
+
+    #model.AddDecisionStrategy(y_color, cp_model.CHOOSE_MIN_DOMAIN_SIZE, cp_model.SELECT_LOWER_HALF)
+
     model.Minimize(x_score)
 
     solver = cp_model.CpSolver()
-    solution_printer = wvcp_solutionPrinter.SolutionPrinter(nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_score, ub_colors)
+    solution_printer = wvcp_primal_solutionPrinter.SolutionPrinter(nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_score, ub_colors)
     solver.parameters.enumerate_all_solutions = True
-    #solver.parameters.num_search_workers = 4
-    solver.parameters = sat_parameters_pb2.SatParameters(num_search_workers=4, max_time_in_seconds = 1200.0)
+    solver.parameters = sat_parameters_pb2.SatParameters(num_search_workers=4, max_time_in_seconds=1200.0)
     solver.Solve(model, solution_printer)
     count, score = solution_printer.solution_count()
     time = solver.WallTime()
-    print(time)
-
+    print(time, "secondes")
 
     return count, score, time
