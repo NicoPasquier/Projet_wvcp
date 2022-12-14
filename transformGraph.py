@@ -1,5 +1,6 @@
 import fileReader
 
+
 def genComplementaryGraph(nr_vertices, neighborhoods, weight):
 
     compGraph = []
@@ -25,7 +26,13 @@ def genComplementaryGraph(nr_vertices, neighborhoods, weight):
                 if (j in successors):
                     successors.remove(j)
 
-    return(compGraph)
+    tmp = []
+    for i in range(len(compGraph)):
+        for j in compGraph[i]:
+            tmp.append((i, j))
+            
+    return tmp
+    #return(compGraph)
 
     
 
