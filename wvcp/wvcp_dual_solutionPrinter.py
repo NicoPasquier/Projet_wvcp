@@ -22,10 +22,10 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
         print('Solution %i, time = %f s' %
               (self.__solution_count, current_time - self.__start_time))
         self.__solution_count += 1
-        print("x = [", end="")
+        """print("x = [", end="")
         for i in range(len(self.__x)):
             print(self.__arc[i], "=> ", end="")
             print(self.Value(self.__x[i]), end=", ")
-        print("]")
+        print("]")"""
         print("y = ", self.Value(self.__y))
         print('score = %s' % self.Value(self.__x_score), end='\n\n')

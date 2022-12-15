@@ -4,7 +4,7 @@ import time
 
 class SolutionPrinter(cp_model.CpSolverSolutionCallback):
 
-    def __init__(self, nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_score, ub_color):
+    def __init__(self, nr_vertices, nr_edges, neighborhoods, x_color, y_color, x_weight, x_dominant=None, x_score=None, ub_color=None):
         cp_model.CpSolverSolutionCallback.__init__(self)
         self.__nr_vertices = nr_vertices
         self.__nr_edges = nr_edges
@@ -12,6 +12,7 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
         self.__x_color = x_color
         self.__y_color = y_color
         self.__x_weight = x_weight
+        self.__x_dominant = x_dominant
         self.__x_score = x_score
         self.__ub_color = ub_color
         self.__solution_count = 0
