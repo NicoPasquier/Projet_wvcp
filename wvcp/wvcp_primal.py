@@ -89,7 +89,7 @@ def primal(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods,
         for i in range(nr_vertices):
             model.Add(x_color[i] <= len(neighborhoods[i]))
 
-    # DR2
+    """# DR2
     if "DR2" in rule:
         for i in range(nr_vertices):
             z = [model.NewIntVar(0, len(neighborhoods[i]), '%i' % j) for j in range(len(neighborhoods[i])+1)]
@@ -99,7 +99,23 @@ def primal(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods,
                 [j for j in range(len(neighborhoods[i])+1)],
                 z
             )
-            wvcp_globals.arg_min(model, x_color[i], z)
+            wvcp_globals.arg_min(model, x_color[i], z)"""
+
+    # DR2 v2
+    if "DR2" in rule:
+        for i in range(nr_vertices):
+            z = [model.NewIntVar(0, ub_colors, '%i' % j) for j in range(len(neighborhoods[i])+1)]
+            #x = [x_color[u] for u in neighborhoods[i]]
+            x = [model.NewIntVar(0,len(neighborhoods[i]),'%i' % j) for j in range(len(neighborhoods[i]))]
+            y = model.NewIntVar(0, ub_colors, "y")
+            for j in range(len(neighborhoods[i])):
+                b = model.NewBoolVar("b")
+                model.Add(x[j] < y).OnlyEnforceIf(b)
+                model.Add(x[j] >= y).OnlyEnforceIf(b.Not())
+                model.Add(z[j] == x[j]).OnlyEnforceIf(b)
+                model.Add(z[j] == 0).OnlyEnforceIf(b.Not())
+                model.Add(z[len(neighborhoods[i])] == 0)
+                model.Add(y == counter(z))
 
     model.AddDecisionStrategy(x_color, cp_model.CHOOSE_MIN_DOMAIN_SIZE, cp_model.SELECT_LOWER_HALF)
     model.Minimize(x_score)
@@ -117,3 +133,9 @@ def primal(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods,
     print(time)
 
     return score, optimal, time
+
+def counter(z):
+    unique_values = set()
+    for value in z:
+        unique_values.add(value)
+    return(len(unique_values))
