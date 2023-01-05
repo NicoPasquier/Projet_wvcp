@@ -74,11 +74,11 @@ def primal(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods,
     # - if the color is used, the dominant vertex is the vertex with smallest id amongst heaviest vertices
     # - if the color is not used, the dominant vertex is the virtual vertex with id=nr_vertices+j where j is the color id 
     x_dominant = [model.NewIntVar(0, j+nr_vertices, 'dominant%i' % j) for j in range(ub_colors)]
-    """for j in range(ub_colors):
+    for j in range(ub_colors):
         wvcp_globals.arg_max_no_zeros(model, j, x_dominant[j], [x_match[i][j] for i in range(nr_vertices)])
     cp_sat_utils.increasing_strict(model, x_dominant)
-    """# redundant (entailed) ordering constraint
-    cp_sat_utils.decreasing(model, x_weight)
+    # redundant (entailed) ordering constraint
+    # cp_sat_utils.decreasing(model, x_weight)
 
     # (SR1)
 

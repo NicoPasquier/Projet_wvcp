@@ -94,7 +94,7 @@ def joint(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods, 
             model.Add(x_color[i] <= len(neighborhoods[i]))
 
     # DR2
-    if "DR2" in rule:
+    """if "DR2" in rule:
         for i in range(nr_vertices):
             z = [model.NewIntVar(0, len(neighborhoods[i]), '%i' % j) for j in range(len(neighborhoods[i]) + 1)]
             cp_sat_utils.global_cardinality(
@@ -103,7 +103,23 @@ def joint(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods, 
                 [j for j in range(len(neighborhoods[i]) + 1)],
                 z
             )
-            wvcp_globals.arg_min(model, x_color[i], z)
+            wvcp_globals.arg_min(model, x_color[i], z)"""
+
+    # DR2 v2
+    if "DR2" in rule:
+        for i in range(nr_vertices):
+            z = [model.NewIntVar(0, ub_colors, '%i' % j) for j in range(len(neighborhoods[i])+1)]
+            #x = [x_color[u] for u in neighborhoods[i]]
+            xDR2 = [model.NewIntVar(0,len(neighborhoods[i]),'%i' % j) for j in range(len(neighborhoods[i]))]
+            yDR2 = model.NewIntVar(0, ub_colors, "y")
+            for j in range(len(neighborhoods[i])):
+                b = model.NewBoolVar("b")
+                model.Add(xDR2[j] < yDR2).OnlyEnforceIf(b)
+                model.Add(xDR2[j] >= yDR2).OnlyEnforceIf(b.Not())
+                model.Add(z[j] == xDR2[j]).OnlyEnforceIf(b)
+                model.Add(z[j] == 0).OnlyEnforceIf(b.Not())
+                model.Add(z[len(neighborhoods[i])] == 0)
+                model.Add(yDR2 == counter(z))
 
     # CORE CONSTRAINTS OF DUAL
     for i in range(len(arc)):
@@ -161,12 +177,12 @@ def joint(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods, 
         if ins[i] != [] and outs[i] == []:
             model.Add(y_dominated[i] == sum(x[hi] for hi in ins[i]))
         # backward and forward vertices
-        if ins[i] != [] and outs[i] != []:
+        """if ins[i] != [] and outs[i] != []:
             k = model.NewIntVar(0, 1, "k")
             model.AddMaxEquality(k, [x[ij] for ij in outs[i]])
             model.Add(1 - y_dominated[i] >= k)
             # model.Add(1 - y_dominated[i] >= max(x[ij] for ij in outs[i]))
-            model.Add(y_dominated[i] >= sum(x[hi] for hi in ins[i]))
+            model.Add(y_dominated[i] >= sum(x[hi] for hi in ins[i]))"""
         # backward and forward vertices are assumed dominant if not grouped
         # if ins[i] != [] and outs[i] == []:
             # model.Add(1-y_dominated[i] >= (1-max(x[ij] for ij in outs[i]))*(1-sum(x[hi] for hi in ins[i])))
@@ -186,3 +202,9 @@ def joint(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods, 
     print(time)
 
     return score, optimal, time
+
+def counter(z):
+    unique_values = set()
+    for value in z:
+        unique_values.add(value)
+    return(len(unique_values))
