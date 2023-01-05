@@ -3,13 +3,13 @@ from ortools.sat import sat_parameters_pb2
 from . import wvcp_dual_solutionPrinter
 
 
-def dual(name, nr_vertices, arc, weight, lb_score=None, ub_score=None):
+def dual(thread, time_limit, name, nr_vertices, arc, weight, lb_score=None, ub_score=None):
     print(name + '\n')
 
     model = cp_model.CpModel()
 
     if lb_score == None:
-        lb_score = min(weight)
+        lb_score = max(weight)
     if ub_score == None:
         ub_score = sum(weight)
 
@@ -46,11 +46,13 @@ def dual(name, nr_vertices, arc, weight, lb_score=None, ub_score=None):
     solver = cp_model.CpSolver()
     solution_printer = wvcp_dual_solutionPrinter.SolutionPrinter(nr_vertices, arc, x, y, x_score)
     solver.parameters.enumerate_all_solutions = True
-    solver.parameters.num_search_workers = 4
-    solver.parameters = sat_parameters_pb2.SatParameters(num_search_workers=4)
-    solver.Solve(model, solution_printer)
+    solver.parameters = sat_parameters_pb2.SatParameters(max_time_in_seconds=time_limit, num_search_workers=thread)
+    status = solver.Solve(model, solution_printer)
     count, score = solution_printer.solution_count()
     time = solver.WallTime()
+    optimal = False
+    if status == cp_model.OPTIMAL:
+        optimal = True
     print(time)
 
-    return count, score, time
+    return score, optimal, time

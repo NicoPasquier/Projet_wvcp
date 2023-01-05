@@ -30,7 +30,7 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
         #print()
         # self.affichage_Sommet_Couleur()
         #print()
-        self.affichage_Poids_Couleur()
+        # self.affichage_Poids_Couleur()
         #print()
         print('score = %s' % self.Value(self.__x_score), end='\n\n')
 
