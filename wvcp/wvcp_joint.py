@@ -177,12 +177,12 @@ def joint(thread, rule, time_limit, name, nr_vertices, nr_edges, neighborhoods, 
         if ins[i] != [] and outs[i] == []:
             model.Add(y_dominated[i] == sum(x[hi] for hi in ins[i]))
         # backward and forward vertices
-        """if ins[i] != [] and outs[i] != []:
+        if ins[i] != [] and outs[i] != []:
             k = model.NewIntVar(0, 1, "k")
             model.AddMaxEquality(k, [x[ij] for ij in outs[i]])
             model.Add(1 - y_dominated[i] >= k)
             # model.Add(1 - y_dominated[i] >= max(x[ij] for ij in outs[i]))
-            model.Add(y_dominated[i] >= sum(x[hi] for hi in ins[i]))"""
+            model.Add(y_dominated[i] >= sum(x[hi] for hi in ins[i]))
         # backward and forward vertices are assumed dominant if not grouped
         # if ins[i] != [] and outs[i] == []:
             # model.Add(1-y_dominated[i] >= (1-max(x[ij] for ij in outs[i]))*(1-sum(x[hi] for hi in ins[i])))

@@ -30,6 +30,7 @@ def genComplementaryGraph(nr_vertices, neighborhoods, weight):
     for i in range(len(compGraph)):
         for j in compGraph[i]:
             tmp.append((i, j))
+            # i -> j
             
     return tmp
     #return(compGraph)
